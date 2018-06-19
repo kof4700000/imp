@@ -1,0 +1,5 @@
+<!DOCTYPE html>
+{% extends "sidebar.html" %}
+{% block main %}
+<p>WelCome!</p>
+{% endblock %}

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+{% extends "base.html" %}
+{% block content %}
+<script src="/static/jquery-3.3.1.min.js"></script>
+<script src="/static/pagination.js"></script>
+<script src="/static/system_func.js"></script>
+<section class="content-header">
+	<h1 style="display:inline">系统信息</h1>
+	<a class="btn btn-default bg-olive" href="{% url 'add_system' %}" style="float:right">系统录入</a>
+</section>
+
+<section class="content">
+	<div class="row">
+		<div class="col-xs-12">
+		  <div class="box">
+			  <div class="box-body">
+					<table class="table table-striped" id="system_table">
+						<tr>
+							<th>系统名称</th>
+							<th>简称</th>
+							<th>A角</th>
+							<th>B角</th>
+							<th>IP</th>
+							<th>action</th>
+						</tr>
+					</table>
+					<ul class="pagination" id="pagination1" style="margin:center">
+						<!-- <li><a onclick="showAll()">showAll</a></li> -->
+					</ul>
+			  </div>
+			</div>
+		</div>
+	</div>
+</section>
+<script>InitialSysPage("{% url 'get_system_count' %}", 20)</script>
+{% endblock %}

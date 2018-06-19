@@ -1,0 +1,14 @@
+/*<script>		//jQuery get data
+	$(document).ready(function(){
+		$.get("get_address", function(data,status){
+			var test1 = data.address;
+			});
+		});
+		</script> */
+	function data(url){	//获取用户下拉菜单
+		$(document).ready(function(){
+			$.get(url, function(data, status){
+				var test1 = data;
+			})
+		})
+	}

@@ -1,0 +1,130 @@
+function get_address_for_sys(url, element_id){	//获取用户下拉菜单
+	  $.get(url, function(data, status){
+	  	//alert(data[0].user)
+	  	for (var i = 0;i < data.length; i++){
+				var opt = document.createElement("option");
+				opt.innerHTML = data[i].display_name;
+				document.getElementById(element_id).appendChild(opt);
+			};
+		});
+}
+
+/*function get_system(url, page_num, page_size){	//获取用户系统
+	//通过向后台发参数，控制返回的数据
+	//这种方法适用于后台返回数据较多时
+	  $.get(url, {"page_num":page_num, "page_size":page_size},function(data, status){
+	  	for (var i = 0;i < data.length; i++){
+				var tr = document.createElement("tr");
+				tr.innerHTML = "<td>" + data[i].short_name + "</td>";
+				document.getElementById("system_table").appendChild(tr);
+			};
+		});
+}*/
+
+//获取用户系统
+function InitialSysPage(url, page_size){
+	$.get(url ,function(data, status){
+		InitialPage("/system/get_system/", "pagination1", "system_table", data.max_count, page_size)
+		})
+	}
+
+function add_ip_text(element_id){	//添加IP
+	  var opt = "";
+	  opt = "<div class=\"input-group col-xs-8\">";
+	  opt = opt + "<div class=\"input-group-addon\"><i class=\"fa fa-laptop\"></i></div>";
+	  opt = opt + "<input type=\"text\" name=\"IP\" class=\"form-control\" data-inputmask=\"\'alias\': \'ip\'\" data-mask>";
+	  opt = opt + "<div class=\"input-group-btn\">";
+	  opt = opt + "<button type=\"button\" class=\"btn btn-danger\" onclick=\"delete_ip_text(this)\">DELETE</button></div>";
+	  opt = opt + "</div>";
+		//document.getElementById("IP_group").innerHTML+=opt;//使用innerHTML时，每次点击按钮TEXT中的内容都会消失
+		//$("#IP_group").append(opt);		//使用jq的append则不会
+		$(element_id).append(opt);		//使用jq的append则不会
+}
+
+function delete_ip_text(dom){	//删除IP
+		//调用此函数的HTML：<button type="button" class="btn btn-danger" onclick="delete_ip_text(this)">DELETE</button>
+		//delete_ip_text(this)中的this，代表的是当前元素，如此将其传入函数中
+		//在函数中使用$(this)就可以选取传入的元素（即调用onclick的元素）
+		$(dom).parent().parent().remove();
+}
+
+function add_system(url){
+	var hosts = []
+	//jquery遍历出的结果是数组，数组中的元素是HTMLElement
+	//对每个数组元素使用对HTMLElement的方法进行操作
+	for (var i=0;i<$("#IP_group").find("input").length;i++)
+	{
+		hosts[i] = $("#IP_group").find("input")[i].value
+		}
+
+	var sys_detail = {
+		"full_name":$("#full_name").val(),
+		"short_name":$("#short_name").val(),
+		"A":$("#A_role_for_sys").val(),
+		"B":$("#B_role_for_sys").val(),
+		"hosts":hosts
+		}
+	$.post(url, sys_detail, function(data,status){
+		})
+}
+
+function edit_system(url){
+	var hosts = []
+	//jquery遍历出的结果是数组，数组中的元素是HTMLElement
+	//对每个数组元素使用对HTMLElement的方法进行操作
+	for (var i=0;i<$("#IP_group").find("input").length;i++)
+	{
+		hosts[i] = $("#IP_group").find("input")[i].value
+		}
+
+	var sys_detail = {
+		"action":"EDIT",
+		"full_name":$("#full_name").val(),
+		"short_name":$("#short_name").val(),
+		"A":$("#A_role_for_sys").val(),
+		"B":$("#B_role_for_sys").val(),
+		"hosts":hosts
+		}
+	
+	//$.post时，返回函数不会执行
+	/*使用$.ajax函数，POST方法，返回函数会跳到error，
+	在error中alert(XMLHttpRequest.status)，发现status为0
+	在error中alert(XMLHttpRequest.readyState)，发现readyState为0
+	此时考虑ajax为异步请求，将其改为同步请求，改为同步请求正确跳到success*/
+	/*$.post(url, sys_detail, function(data,status){
+		alert(data)
+		});*/
+	$.ajax({
+		url:url,
+		data:sys_detail,
+		dataType:'json',
+		type:'POST',
+		async:false,
+		success:function(data){
+			if (data.success == 1){
+		window.location.replace("/system/");
+		/*window.location.replace("/system/")时，要注意前端提交button的type
+		由于我们使用的是同步ajax，如果button的type="submit"，流程首先是点击了
+		submit按钮，然后ajax执行，在ajax同步执行回调函数中执行跳转，实际进行了
+		跳转，然后ajax完成了，这之后再完成submit的提交请求，这时页面又从跳转
+		后的页面跳回执行submit的页面。解决这种情况的一种方法，就是不在回调函数中
+		进行跳转，而在form中添加跳转地址，<form action=url>
+		这样submit完成后就可以跳转到需要的页面*/
+		//return false;
+		}
+		},
+		error:function(XMLHttpRequest, textStatus, errorThrown){
+			//alert(XMLHttpRequest.status)
+			//alert(XMLHttpRequest.readyState)
+		},/*
+		complete:function(data){
+			alert(data)
+		},*/
+
+	});
+
+}
+
+function get_ip_for_sys(){
+	
+}
