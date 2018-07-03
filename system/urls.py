@@ -23,5 +23,6 @@ urlpatterns = [
     url(r'^crud/$', views.crud_system, name = "crud_system"),
     url(r'^get_system/$', views.get_system, name = "get_system"),
     url(r'^get_system_count/$', views.get_system_count, name = "get_system_count"),
-    url(r'^host/$', views.host_page, name = "host_page"),
+    #url(r'^host/$', views.host_page, name = "host_page"),
+    url(r'^host/$', views.HostListView.as_view(), name = "host_page"),
 ]

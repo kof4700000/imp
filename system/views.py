@@ -171,3 +171,43 @@ def host_page(request):
             })
 
     return render(request, "system/host.html", context={"hosts":response})
+
+from django.views import generic
+
+class HostListView(generic.ListView):
+
+    model = Host
+    template_name = 'system/host.html'
+    context_object_name = 'hosts'
+    '''
+    def get_context_data(self, **kwargs):
+        a_role = ''
+        b_role = ''
+        context = super(HostListView, self).get_context_data(**kwargs)
+        print(context)
+        if User_System.objects.filter(sys = sys, role = 'A').exists():
+            a_role = User_System.objects.filter(sys = sys, role = 'A')[0].user.display_name
+        if User_System.objects.filter(sys = sys, role = 'B').exists():    
+            b_role = User_System.objects.filter(sys = sys, role = 'B')[0].user.display_name
+        context['A_role'] = a_role
+        context['B_role'] = b_role 
+        return context
+    '''
+    def get_queryset(self):
+        host_array = Host.objects.all()
+        response = []
+        a_role = ''
+        b_role = ''
+        for host in host_array:
+            sys = host.system
+            if User_System.objects.filter(sys = sys, role = 'A').exists():
+                a_role = User_System.objects.filter(sys = sys, role = 'A')[0].user.display_name
+            if User_System.objects.filter(sys = sys, role = 'B').exists():
+                b_role = User_System.objects.filter(sys = sys, role = 'B')[0].user.display_name
+            response.append({'ip':host.IP,
+                         'sys_name':sys.short_name,
+                         'A_role':a_role,
+                         'B_role':b_role
+                })
+        return response
+
