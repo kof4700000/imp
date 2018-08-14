@@ -104,7 +104,7 @@ function To_Page(url, element_id, page_num, page_size, code_block){
 				tr.innerHTML += "<td><div class=\"btn-group-vertical\"><div class=\"btn-group\"><button type=\"button\" class=\"btn btn-default dropdown-toggle\" data-toggle=\"dropdown\"><span class=\"caret\"></span></button><ul class=\"dropdown-menu\">" + IP_selection; //"<li><a href=\"#\">Dropdown link</a></li>"
 				tr.innerHTML += "</ul></div></div></td>";
 				//tr.innerHTML += "<td>" + "<button onclick=\"get_sys_detail('"+ data[i].full_name + "')\">detail" + "</td>";
-				tr.innerHTML += "<td>" + "<a href=\"/system/edit/" + data[i].short_name + "\">detail</a>" + "</td>";
+				tr.innerHTML += "<td>" + "<a href=\"/system/detail/" + data[i].short_name + "\">EDIT</a>" + "</td>";
 				document.getElementById(element_id).appendChild(tr);
 			};
 		});

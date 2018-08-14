@@ -1,3 +1,4 @@
+# -*- coding: cp936 -*-
 """wh4imp URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
@@ -18,11 +19,12 @@ from . import views
 
 urlpatterns = [
     url(r'^$', views.system_page, name = "system_page"),
+    url(r'^host/$', views.host_page, name = "host_page"),
+    #notice£ºhost/ also fit ([A-z-]*)/ pattern£¬put host/ before to fit first
+    url(r'^([A-z-]*)/$', views.system_detail, name = "system_detail"),
     url(r'^add/$', views.add_system, name = "add_system"),
-    url(r'^edit/([A-z-]+)/$', views.edit_system, name = "edit_system"),
+    url(r'^edit/([A-z-]*)/$', views.edit_system, name = "edit_system"),
     url(r'^crud/$', views.crud_system, name = "crud_system"),
-    url(r'^get_system/$', views.get_system, name = "get_system"),
-    url(r'^get_system_count/$', views.get_system_count, name = "get_system_count"),
-    #url(r'^host/$', views.host_page, name = "host_page"),
-    url(r'^host/$', views.HostListView.as_view(), name = "host_page"),
+    url(r'^get_system/([A-z-]*)/$', views.get_system, name = "get_system"),
+    #url(r'^get_system_count/$', views.get_system_count, name = "get_system_count"),
 ]

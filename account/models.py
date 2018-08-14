@@ -11,3 +11,4 @@ class IMPUser(User):
     display_name = models.CharField(max_length=20, blank=True)
     office = models.CharField(max_length=20,blank=True)
     num = models.CharField(max_length=4,blank=True)
+

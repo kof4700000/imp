@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+{% extends "base.html" %}
+{% block content %}
+<section class="content-header">
+	<h1 style="display:inline">系统信息</h1>
+	<a class="btn btn-default bg-olive" href="{% url 'add_system' %}" style="float:right">系统录入</a>
+</section>
+
+<section class="content">
+	<div class="row">
+		<div class="col-xs-12">
+		  <div class="box">
+			  <div class="box-body">
+					<table id="system_table" class="table table-bordered table-striped">
+						<thead>
+							<tr>
+								<th>系统名称</th>
+								<th>简称</th>
+								<th>A角</th>
+								<th>B角</th>
+								<th>IP</th>
+								<th>操作</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for each in system %}
+				    	<tr>
+						    <td>{{ each.full_name }}</td>
+						    <!-- <td>{{ each.short_name }}</td> -->
+						    <td><p data-toggle="modal" data-target="#sys_detail_fade" onclick="get_sys_detail('{% url 'get_system' each.short_name %}')">{{ short_name }}</p></td>
+						    <!-- <td><a href="{% url 'get_detail' each.A_username %}">{{ each.A_role }}</a></td> -->
+						    <td>
+						    	<span class='dropdown'>
+        						<a href='#' class='dropdown-toggle' data-toggle='dropdown'>
+            					<span onclick="get_user_contact(this, '{% url 'get_detail' each.A_username %}')">{{ each.A_role }}</span>
+										</a>
+      						<div class='dropdown-menu' style="background-color:#e7e7e7">
+               			<div class='row'><div class='col-md-12'><i class="fa fa-phone"></i><span id='simple_tel'></span></div></div>
+               			<div class='row'><div class='col-md-12'><i class="fa fa-mobile"></i><span id='simple_mobile'></span></div></div>
+               			<div class="divider" style="background-color:green"></div>
+                    <div class='row'><div class='col-md-12'>
+                    	<a class="btn btn-primary" href="{% url 'get_detail' each.A_username %}">详情页</a>
+                    </div></div>
+        					</div>
+        					</span>
+        				</td>
+						    <td><a href="{% url 'get_detail' each.B_username %}">{{ each.B_role }}</a></td>
+								<td>
+									<div class="btn-group-vertical">
+										<div class="btn-group">
+											<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+												<span class="caret"></span>
+											</button>
+											<ul class="dropdown-menu">
+												{% for ip in each.ip %}
+												<!-- <li>{{ ip }}</li> -->
+												<div class="bg-gray disabled color-palette"><span>{{ ip }}</span></div>
+												{% endfor %}
+											</ul>
+										</div>
+									</div>
+								</td>
+								<!-- <td><a href="/system/edit/{{ each.short_name }}">编辑</a></td> -->
+								<td>
+									<div class="btn-group">
+                  <!-- <button type="button" class="btn btn-default" data-toggle="modal" data-target="#sys_detail_fade" onclick="get_sys_detail('{% url 'get_system' each.short_name %}')">详情</button> -->
+                  <a type="button" class="btn btn-default" data-toggle="modal" href="/system/{{ each.short_name }}">详情</a>
+                  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                    <span class="caret"></span>
+                    <span class="sr-only">Toggle Dropdown</span>
+                  </button>
+                  <ul class="dropdown-menu" role="menu">
+                    <li><a href="/system/edit/{{ each.short_name }}">编辑</a></li>
+                  </ul>
+                </div>
+								</td>
+				    	</tr>
+			    		{% endfor%}
+		    		</tbody>
+					</table>
+					
+					<div class="modal fade" id="sys_detail_fade">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">系统详情</h4>
+              </div>
+              <div class="modal-body">
+                <table id="sys_detail_table">
+                	<thead>
+	                	<tr>
+	                		<th>全称</th>
+	                		<th>简称</th>
+	                	</tr>
+                	</thead>
+                	<tbody>
+	                	<tr>
+	                		<td></td>
+	                		<td></td>
+	                	</tr>
+                	</tbody>
+                </table>
+                
+                <table id="sys_detail_table2">
+                	<thead>
+	                	<tr>
+	                		<th>IP组</th>
+	                	</tr>
+                	</thead>
+                	<tbody>
+	                	<tr>
+	                		<td></td>
+	                	</tr>
+                	</tbody>
+                </table>
+                
+                <h4 class="modal-title" align="left">相关人员</h4>
+                <table id="sys_detail_table3">
+                	<thead>
+	                	<tr>
+	                		<th>姓名</th>
+	                	</tr>
+                	</thead>
+                	<tbody>
+	                	<tr>
+	                		<td></td>
+	                	</tr>
+                	</tbody>
+                </table>
+              </div>
+              <!-- <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+              </div>  -->
+            </div>
+          </div>
+        	</div>
+        
+			  </div>
+			</div>
+		</div>
+	</div>
+</section>
+<script>
+	$(document).ready(
+  $(function () {
+  	$('#system_table').DataTable({
+      'paging'      : true,
+      'lengthChange': true,
+      'searching'   : true,
+      'ordering'    : true,
+      'info'        : true,
+      'autoWidth'   : true
+    })
+  }))
+</script>
+<script>
+	function get_sys_detail(url){
+		/*var system = $(dom).parent().parent().parent().children("td").eq(1).html();*/
+		$.get(url, function(data, status){
+			$("#sys_detail_table td:first").text(data.full_name);
+			$("#sys_detail_table td:eq(1)").text(data.short_name);
+			var ip_string = "";
+			for (var i=0;i<data.ip.length;i++){
+				ip_string += data.ip[i].ip + "\n"
+			}
+			$("#sys_detail_table2 td:eq(0)").text(ip_string)
+		})
+	}
+</script>
+<script>
+	function get_user_contact(dom, url){
+		$.get(url, {"query":"simple"}, function(data, status){
+			$(dom).parent().parent().parent().find("#simple_tel").text(" " + data.tel)
+			$(dom).parent().parent().parent().find("#simple_mobile").text(" " + data.mobile)
+			//$("#simple_mobile").text(" " + data.mobile)
+		})
+	}
+</script>
+{% endblock %}

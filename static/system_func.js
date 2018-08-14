@@ -22,11 +22,11 @@ function get_address_for_sys(url, element_id){	//获取用户下拉菜单
 }*/
 
 //获取用户系统
-function InitialSysPage(url, page_size){
+/*function InitialSysPage(url, page_size){
 	$.get(url ,function(data, status){
 		InitialPage("/system/get_system/", "pagination1", "system_table", data.max_count, page_size)
 		})
-	}
+	}*/
 
 function add_ip_text(element_id){	//添加IP
 	  var opt = "";
@@ -58,6 +58,7 @@ function add_system(url){
 		}
 
 	var sys_detail = {
+		"action":"ADD",
 		"full_name":$("#full_name").val(),
 		"short_name":$("#short_name").val(),
 		"A":$("#A_role_for_sys").val(),

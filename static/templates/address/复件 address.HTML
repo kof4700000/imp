@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+{% extends "sidebar.html" %}
+{% block main %}
+<script src="/static/pagination.js"></script>
+  <form action="{% url 'get_detail' %}" method="post" style="display:block">
+  	<a>ADDRESS</a>
+  	<input type="submit" value="search" style="float:right">
+  	<input type="text" name="username" style="float:right">	
+  </form>
+	<table class="table table-striped" id="address_table">
+			<tr>
+				<th>id</th>
+				<th>username</th>
+				<th>tel</th>
+				<th>mobile</th>
+				<th>action	</th>
+			</tr>
+		{% for each in address %}
+			<tr id="{{ each.username }}">
+				<td>{{ each.display_id }}</td>
+				<td>{{ each.display_name }}</td>
+				<td>{{ each.tel }}</td>
+				<td>{{ each.mobile }}</td>
+				<td>
+					<form action="{% url 'get_detail' %}" method="post">
+						<input type="text" name="username" value="{{ each.display_name }}" style="display:none">
+						<input type="submit" value="detail">
+  				</form>
+					<!-- <div class="dropdown">
+						<button type="button" class="btn dropdown-toggle" data-toggle="dropdown" id="menu1">detail</button>
+						<ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
+							<li role="presentation"><a role="menuitem" tabindex="-1" href="#">test</a></li>
+							</ul>
+					</div>-->
+				</td>
+			</tr>
+		{% endfor%}
+	</table>
+<!-- can't load bootstrap pagination css -->
+<ul class="pagination" id="pagination1" style="margin:center">
+	<!--<li><a href="#">test</a>
+		<a href="#">test2</a></li>
+	</ul>-->
+	<li><a onclick="showAll()">showAll</a></li>
+</ul>
+<script>InitPage()</script>
+{% endblock %}

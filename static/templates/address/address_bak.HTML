@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<link href="/static/sidebar.css" type="text/css" rel="stylesheet">
+<script src="/static/jquery-3.3.1.min.js"></script>
+<!--<script>
+	$(document).ready(function(){
+		$.get("get_address", function(data,status){
+			var test1 = data.address;
+			});
+		});
+		</script>-->
+<div class='sidebar'>
+<ul>
+	<li><a href="/front">Home</a></li>
+	<li><a href="/address">Address</a></li>
+	<li><a href="#blog">Blog</a></li>
+	</ul>
+<!-- <img src="/static/test.jpg"></img> -->
+</div>
+<!-- <div style="margin-left:120px;"> -->
+<div class='main'>
+  <form action="{% url 'get_detail' %}" method="post">
+  	<input type="text" name="username">
+  	<input type="submit" value="search">
+  </form>
+	<table border="1">
+			<tr>
+				<th>username</th>
+				<th>tel</th>
+				<th>mobile</th>
+			</tr>
+		{% for each in address %}
+			<tr id="{{ each.username }}">
+				<td>{{ each.display_name }}</td>
+				<td>{{ each.tel }}</td>
+				<td>{{ each.mobile }}</td>
+			</tr>
+		{% endfor%}
+	</table>
+</div>
+</html>

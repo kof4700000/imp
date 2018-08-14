@@ -1,0 +1,18 @@
+<table id="sys_table" class="table table-bordered table-striped">
+<thead>
+  <tr>
+    <th>IP</th>
+    <th>系统名</th>
+    <th>角色</th>
+  </tr>
+</thead>
+<tbody>
+{% for each in host %}
+  <tr>
+    <td>{{ each.host }}</td>
+    <td>{{ each.system }}</td>
+    <td>{{ each.role }}</td>
+  </tr>
+{% endfor%} 	
+</tbody>
+</table>

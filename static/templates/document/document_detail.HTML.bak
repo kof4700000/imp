@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+{% extends "base.html" %}
+{% block content %}
+
+<section class="content-header">
+	<h1 style="display:inline">ÎÄµµ</h1><a class="btn btn-info pull-right" href="{% url 'doc_page' %}">·µ»Ø</a>
+</section>
+
+<section class="content">
+<div class="row">
+<div class="col-xs-12">
+  <div class="box">
+    <!-- <div class="box-header">
+    </div>  -->
+    <div class="box-body">
+       <iframe style="width: 100%;height: 500px"src="/static/docs/test_pdf.pdf"></iframe>
+    </div>
+  </div>
+</div>
+</div>
+</section>
+
+{% endblock %}

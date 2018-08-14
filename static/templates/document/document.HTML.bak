@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+{% extends "base.html" %}
+{% block content %}
+
+<section class="content-header">
+	<h1 style="display:inline">文档列表</h1>
+	<button type="button" class="btn btn-info pull-right" data-toggle="modal" data-target="#modal-default">上传新文档</button>
+	
+	<div class="modal fade" id="modal-default">
+		<div class="modal-dialog">
+		  <div class="modal-content">
+		    <div class="modal-header">
+		      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		        <span aria-hidden="true">&times;</span></button>
+		      <h4 class="modal-title">上传新文档</h4>
+		    </div>
+		    <form id="upload">
+		    <div class="modal-body">
+		      <div class="form-group">
+			        <label>File input</label>
+			        <input type="file" id="exampleInputFile" style="display:inline">
+			        <div class="form-group has-error" style="display:none" id="no_file_tip">
+  							<label class="control-label"><i class="fa fa-times-circle-o"></i>请选择文件</label>
+							</div>
+			        <p class="help-block">选择上传文件.</p>
+			    </div>
+		      <div class="form-group">
+			        <label style="display:block">文档标签</label>
+			        <input type="text" id="tag" placeholder="请输入文档标签">
+			      	<div class="form-group has-error" style="display:none" id="no_tag_tip">
+  							<label class="control-label"><i class="fa fa-times-circle-o"></i>请输入标签</label>
+							</div>
+			        <p class="help-block">建议以系统简称作为文档标签.</p>
+		      </div>
+		    </div>
+		    <div class="modal-footer">
+		      <button type="button" class="btn btn-default pull-left" data-dismiss="modal">取消</button>
+		      <button type="button" class="btn btn-primary" onclick="upload_file_ajax()">上传</button>
+		    </div>
+		    </form>
+		  </div>
+		</div>
+  </div>
+  
+</section>
+
+<section class="content">
+<div class="row">
+<div class="col-xs-12">
+  <div class="box">
+    <!-- <div class="box-header">
+    </div>  -->
+    <div class="box-body">
+      <table id="address_table" class="table table-bordered table-striped">
+        <thead>
+          <tr>
+				    <th>文章</th>
+			    </tr>
+        </thead>
+        <tbody>
+        {% for each in doc %}
+			    <tr>
+				    <td><a href="{% url 'doc_detail' each.doc_id %}">{{ each.doc_name }}</a></td>
+			    </tr>
+		    {% endfor%} 	
+        </tbody>
+       </table>
+    </div>
+  </div>
+</div>
+</div>
+</section>
+<!--<ul class="pagination" id="pagination1" style="margin:center">
+	<li><a onclick="showAll()">showAll</a></li>
+</ul>
+<script>InitPage()</script> -->
+<!-- <script src="/static/templates/AdminLTE-2.4.3/bower_components/jquery/dist/jquery.min.js"></script> -->
+<script>
+	$(document).ready(
+  $(function () {
+  	$('#address_table').DataTable({
+      'paging'      : true,
+      'lengthChange': true,
+      'searching'   : true,
+      'ordering'    : false,
+      'info'        : true,
+      'autoWidth'   : true
+    })
+  }))
+</script>
+<script>
+	function check_tag(){
+		if ($("#tag").val() == '')
+		    {
+				$("#no_tag_tip").css({"display":"inline"});
+		    return false}
+		return true
+	}
+	function check_file(){
+		if ($("#exampleInputFile").val() == '')
+		    {
+		    $("#no_file_tip").css({"display":"inline"});
+		    return false}
+		return true
+	}
+	/*Note that request.FILES will only contain data if the request 
+	method was POST and the <form> that posted the request has the 
+	attribute enctype="multipart/form-data". Otherwise, request.FILES 
+	will be empty.*/
+	/*如上，使用form的submit方法时需要设置form的enctype="multipart/form-data"，否则
+	request.FILES为空*/
+	//这里使用ajax方法，注意processData和contentType
+	function upload_file_ajax(){
+		if (!check_tag()){return}
+		if (!check_file()){return}
+		$("#no_tag_tip").css({"display":"none"})
+		$("#no_file_tip").css({"display":"none"})
+		var upload_data = document.getElementById("exampleInputFile").files[0];
+		var formData = new FormData();
+		var tag = $("#tag").val()
+		formData.append("file", upload_data);
+		formData.append("tag", tag);
+		$.ajax({
+			url:"upload/",
+			type:"post",
+			data:formData,
+			//asynic:false,
+			processData:false,	//tell jquery not to process the data
+			contentType:false,	//tell jquery not to set contentType
+			success:function(response){
+				alert("success")
+				window.location.replace("/document/");
+			}
+		})
+	}
+</script>
+{% endblock %}

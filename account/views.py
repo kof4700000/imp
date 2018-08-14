@@ -1,10 +1,10 @@
-# -*- coding: GB2312 -*-
+# -*- coding: utf-8 -*-
 from django.shortcuts import render, redirect
 from django.contrib import auth
 from system.models import User_System, Host, System
 from .models import *
 from django.core import urlresolvers
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
 
@@ -15,11 +15,22 @@ def sign_in_page(request):
 def sign_up_page(request):
     return render(request, "account/sign_up.html", context={})
 
+def current_user(request):
+    """
+    return current_user.
+    """
+    try:
+        response = IMPUser.objects.get(username = request.user.username).display_name
+        return HttpResponse(response)
+    except IMPUser.DoesNotExist:
+        return HttpResponse('error')
+
 def login(request):
+    """
+    login function.
+    """
     username = request.POST['username']
     password = request.POST['password']
-    print(username)
-    print(password)
     user = auth.authenticate(username=username, password=password)
     print(user)
     if user is not None:
@@ -27,8 +38,22 @@ def login(request):
         return redirect(urlresolvers.reverse("front_page")) 
     return redirect(urlresolvers.reverse("sign_in"))
 
+def logout(request):
+    """
+    logout function.
+    """
+    print(request.user)
+    try:
+        auth.logout(request)
+        return JsonResponse({"success":True})
+    except:
+        pass
+
 @csrf_exempt
 def crud_user(request):
+    """
+    ADD and EDIT user function.
+    """
     if request.POST['action'] == 'EDIT':
         username = request.POST['username']
         tel = request.POST['tel']
@@ -57,6 +82,9 @@ def crud_user(request):
     return redirect(urlresolvers.reverse("sign_in"))
 
 def edit_user(request, username):
+    """
+    Show edit page of IMPUser.
+    """
     context = {}
     detail = IMPUser.objects.all().filter(username = username)
     if detail:
@@ -69,8 +97,17 @@ def edit_user(request, username):
     return render(request, "account/edit_user.html", context)
 
 def get_detail(request, username):
+    """
+    Show detail page of IMPUser.
+    """
     detail = IMPUser.objects.all().filter(username = username)
     if detail:
+        try:
+            if request.GET['query'] == 'simple':
+                context = {'tel':detail[0].tel,'mobile':detail[0].mobile}
+                return JsonResponse(context)
+        except:
+            pass
         context = {'username':username,
                    'display_name':detail[0].display_name,
                    'tel':detail[0].tel,
@@ -94,46 +131,63 @@ def get_detail(request, username):
 def init_adderss(request):
     try:
         '''
-        IMPUser.objects.create_user(username = 'kuangliyan', password = '123456',display_name = u'Ú÷ÀöÑà' ,     tel='82973380' ,mobile='13701365769')
-        IMPUser.objects.create_user(username = 'hexin', password = '123456',display_name = u'ºÎöÎ' ,     tel='82973381' ,mobile='13522207275')
-        IMPUser.objects.create_user(username = 'zouxin', password = '123456',display_name = u'×ŞĞÀ' ,     tel='82973382' ,mobile='13051535444')
-        IMPUser.objects.create_user(username = 'luyunyi', password = '123456',display_name = u'Â½ÔÆÒÙ' ,     tel='82973383' ,mobile='13681421319')
-        IMPUser.objects.create_user(username = 'zhujin', password = '123456',display_name = u'Öì½ø' ,     tel='82973384' ,mobile='13161283736')
-        IMPUser.objects.create_user(username = 'yuankongwei', password = '123456',display_name = u'Ô¬ºêÎ°' ,     tel='82973385' ,mobile='13126604123')
-        IMPUser.objects.create_user(username = 'wuweimin', password = '123456',display_name = u'ÎâÎªÃñ' ,     tel='82973386' ,mobile='13718165715')
-        IMPUser.objects.create_user(username = 'fengli', password = '123456',display_name = u'·ëÀò' ,     tel='82973389' ,mobile='13910992857')
-        IMPUser.objects.create_user(username = 'wangxuedong', password = '123456',display_name = u'ÍõÑ§¶«' ,     tel='82973390' ,mobile='18911006195')
-        IMPUser.objects.create_user(username = 'xulizhe', password = '123456',display_name = u'ĞíÀúÕÜ' ,     tel='82973391' ,mobile='18600560239')
-        IMPUser.objects.create_user(username = 'chengzhiqiang', password = '123456',display_name = u'³ÌÖ¾Ç¿' ,     tel='82973392' ,mobile='18601180769')
-        IMPUser.objects.create_user(username = 'jiangpihui', password = '123456',display_name = u'½ªØ§»Ô' ,     tel='82973394' ,mobile='13522668756')
-        IMPUser.objects.create_user(username = 'songboyang', password = '123456',display_name = u'ËÎ²©Ñó' ,     tel='82973395' ,mobile='18519665605')
-        IMPUser.objects.create_user(username = 'yangxia', password = '123456',display_name = u'ÑîÏ¼' ,     tel='82973396' ,mobile='13691166263')
-        IMPUser.objects.create_user(username = 'liuqiang', password = '123456',display_name = u'ÁõÇ¿' ,     tel='82973397' ,mobile='13910852448')
-        IMPUser.objects.create_user(username = 'dumin', password = '123456',display_name = u'¶ÅÃô' ,     tel='82973399' ,mobile='13651101282')
-        IMPUser.objects.create_user(username = 'fantao', password = '123456',display_name = u'·®ÌÎ' ,     tel='82973176' ,mobile='13366756699')
-        IMPUser.objects.create_user(username = 'guyuanjun', password = '123456',display_name = u'¹ËÔª¾ü' ,     tel='82973181' ,mobile='13811910682')
-        IMPUser.objects.create_user(username = 'diaolei', password = '123456',display_name = u'µóÀÚ' ,     tel='82973717' ,mobile='13521666611')
-        IMPUser.objects.create_user(username = 'juying', password = '123456',display_name = u'¾ŞÓ±' ,     tel='82973776' ,mobile='13699271750')
-        IMPUser.objects.create_user(username = 'huangfei', password = '123456',display_name = u'»Æ·É' ,     tel='82973777' ,mobile='18201412639')
-        IMPUser.objects.create_user(username = 'lijinxue', password = '123456',display_name = u'Àî½øÑ§' ,     tel='82973775' ,mobile='13426150531')
-        IMPUser.objects.create_user(username = 'zhudongji', password = '123456',display_name = u'Öì¶¬¼ª' ,     tel='82975041' ,mobile='15210502624')
-        IMPUser.objects.create_user(username = 'liheng', password = '123456',display_name = u'Àîçñ' ,     tel='82975120' ,mobile='18601105056')
-        IMPUser.objects.create_user(username = 'liupu', password = '123456',display_name = u'Áõè±' ,     tel='82975424' ,mobile='13070166508')
-        IMPUser.objects.create_user(username = 'wangjieru', password = '123456',display_name = u'Íõ½àÈã' ,     tel='82975423' ,mobile='13910570212')
-        IMPUser.objects.create_user(username = 'yandawei', password = '123456',display_name = u'ÑÖ´óÎ°' ,     tel='82976415' ,mobile='15001240247')
-        IMPUser.objects.create_user(username = 'liangmiao', password = '123456',display_name = u'Áºíµ' ,     tel='82977037' ,mobile='18513178610')
-        IMPUser.objects.create_user(username = 'mengchijie', password = '123456',display_name = u'ÃÏ³Ø½à' ,     tel='82977046' ,mobile='13552104910')
-        IMPUser.objects.create_user(username = 'wuchufan', password = '123456',display_name = u'Îâ³ş·²',     tel='82977487' ,mobile='18302245037')
-        IMPUser.objects.create_user(username = 'luogan', password = '123456',display_name = u'ÂŞ¸É',  tel='82975460',     mobile='13269373256')
-    	IMPUser.objects.create_user(username = 'wangruixue', password = '123456',display_name = u'ÍõÈğÑ©',     tel='82974490',     mobile='15801202262')
-	IMPUser.objects.create_user(username = 'zourui', password = '123456',display_name = u'×ŞÈñ', tel='82974324',     mobile='13681337610')
-	IMPUser.objects.create_user(username = 'yinzhiwei', password = '123456',display_name = u'ÒüÖ¾Î°',     tel='82974536',     mobile='15210012010')
-	IMPUser.objects.create_user(username = 'shijinpeng', password = '123456',display_name = u'Ê¦½õÅô',     tel='',     mobile='18210257509')
-	IMPUser.objects.create_user(username = 'liuyan', password = '123456',display_name = u'ÁõÑŞ',     tel='82974473',     mobile='18801388700')
-	IMPUser.objects.create_user(username = 'liuzhi', password = '123456',display_name = u'ÁõÖ¾',     tel='82974359',     mobile='18701392961')
-	IMPUser.objects.create_user(username = 'cuienming', password = '123456',display_name = u'´Ş¶÷Ãú',     tel='',     mobile='18910007540')
+        IMPUser.objects.create_user(username = 'kuangliyan', password = '123456',display_name = u'é‚ä¸½ç‡•' ,     tel='82973380' ,mobile='13701365769')
+        IMPUser.objects.create_user(username = 'hexin', password = '123456',display_name = u'ä½•é‘«' ,     tel='82973381' ,mobile='13522207275')
+        IMPUser.objects.create_user(username = 'zouxin', password = '123456',display_name = u'é‚¹æ¬£' ,     tel='82973382' ,mobile='13051535444')
+        IMPUser.objects.create_user(username = 'luyunyi', password = '123456',display_name = u'é™†äº‘å±¹' ,     tel='82973383' ,mobile='13681421319')
+        IMPUser.objects.create_user(username = 'zhujin', password = '123456',display_name = u'æœ±è¿›' ,     tel='82973384' ,mobile='13161283736')
+        IMPUser.objects.create_user(username = 'yuankongwei', password = '123456',display_name = u'è¢å®ä¼Ÿ' ,     tel='82973385' ,mobile='13126604123')
+        IMPUser.objects.create_user(username = 'wuweimin', password = '123456',display_name = u'å´ä¸ºæ°‘' ,     tel='82973386' ,mobile='13718165715')
+        IMPUser.objects.create_user(username = 'fengli', password = '123456',display_name = u'å†¯è‰' ,     tel='82973389' ,mobile='13910992857')
+        IMPUser.objects.create_user(username = 'wangxuedong', password = '123456',display_name = u'ç‹å­¦ä¸œ' ,     tel='82973390' ,mobile='18911006195')
+        IMPUser.objects.create_user(username = 'xulizhe', password = '123456',display_name = u'è®¸å†å“²' ,     tel='82973391' ,mobile='18600560239')
+        IMPUser.objects.create_user(username = 'chengzhiqiang', password = '123456',display_name = u'ç¨‹å¿—å¼º' ,     tel='82973392' ,mobile='18601180769')
+        IMPUser.objects.create_user(username = 'jiangpihui', password = '123456',display_name = u'å§œä¸•è¾‰' ,     tel='82973394' ,mobile='13522668756')
+        IMPUser.objects.create_user(username = 'songboyang', password = '123456',display_name = u'å®‹åšæ´‹' ,     tel='82973395' ,mobile='18519665605')
+        IMPUser.objects.create_user(username = 'yangxia', password = '123456',display_name = u'æ¨éœ' ,     tel='82973396' ,mobile='13691166263')
+        IMPUser.objects.create_user(username = 'liuqiang', password = '123456',display_name = u'åˆ˜å¼º' ,     tel='82973397' ,mobile='13910852448')
+        IMPUser.objects.create_user(username = 'dumin', password = '123456',display_name = u'æœæ•' ,     tel='82973399' ,mobile='13651101282')
+        IMPUser.objects.create_user(username = 'fantao', password = '123456',display_name = u'æ¨Šæ¶›' ,     tel='82973176' ,mobile='13366756699')
+        IMPUser.objects.create_user(username = 'guyuanjun', password = '123456',display_name = u'é¡¾å…ƒå†›' ,     tel='82973181' ,mobile='13811910682')
+        IMPUser.objects.create_user(username = 'diaolei', password = '123456',display_name = u'åˆç£Š' ,     tel='82973717' ,mobile='13521666611')
+        IMPUser.objects.create_user(username = 'juying', password = '123456',display_name = u'å·¨é¢–' ,     tel='82973776' ,mobile='13699271750')
+        IMPUser.objects.create_user(username = 'huangfei', password = '123456',display_name = u'é»„é£' ,     tel='82973777' ,mobile='18201412639')
+        IMPUser.objects.create_user(username = 'lijinxue', password = '123456',display_name = u'æè¿›å­¦' ,     tel='82973775' ,mobile='13426150531')
+        IMPUser.objects.create_user(username = 'zhudongji', password = '123456',display_name = u'æœ±å†¬å‰' ,     tel='82975041' ,mobile='15210502624')
+        IMPUser.objects.create_user(username = 'liheng', password = '123456',display_name = u'æç©' ,     tel='82975120' ,mobile='18601105056')
+        IMPUser.objects.create_user(username = 'liupu', password = '123456',display_name = u'åˆ˜ç’' ,     tel='82975424' ,mobile='13070166508')
+        IMPUser.objects.create_user(username = 'wangjieru', password = '123456',display_name = u'ç‹æ´èŒ¹' ,     tel='82975423' ,mobile='13910570212')
+        IMPUser.objects.create_user(username = 'yandawei', password = '123456',display_name = u'é˜å¤§ä¼Ÿ' ,     tel='82976415' ,mobile='15001240247')
+        IMPUser.objects.create_user(username = 'liangmiao', password = '123456',display_name = u'æ¢æ·¼' ,     tel='82977037' ,mobile='18513178610')
+        IMPUser.objects.create_user(username = 'mengchijie', password = '123456',display_name = u'å­Ÿæ± æ´' ,     tel='82977046' ,mobile='13552104910')
+        IMPUser.objects.create_user(username = 'wuchufan', password = '123456',display_name = u'å´æ¥šå‡¡',     tel='82977487' ,mobile='18302245037')
+        IMPUser.objects.create_user(username = 'luogan', password = '123456',display_name = u'ç½—å¹²',  tel='82975460',     mobile='13269373256')
+    	IMPUser.objects.create_user(username = 'wangruixue', password = '123456',display_name = u'ç‹ç‘é›ª',     tel='82974490',     mobile='15801202262')
+	IMPUser.objects.create_user(username = 'zourui', password = '123456',display_name = u'é‚¹é”', tel='82974324',     mobile='13681337610')
+	IMPUser.objects.create_user(username = 'yinzhiwei', password = '123456',display_name = u'å°¹å¿—ä¼Ÿ',     tel='82974536',     mobile='15210012010')
+	IMPUser.objects.create_user(username = 'shijinpeng', password = '123456',display_name = u'å¸ˆé”¦é¹',     tel='',     mobile='18210257509')
+	IMPUser.objects.create_user(username = 'liuyan', password = '123456',display_name = u'åˆ˜è‰³',     tel='82974473',     mobile='18801388700')
+	IMPUser.objects.create_user(username = 'liuzhi', password = '123456',display_name = u'åˆ˜å¿—',     tel='82974359',     mobile='18701392961')
+	IMPUser.objects.create_user(username = 'cuienming', password = '123456',display_name = u'å´”æ©é“­',     tel='',     mobile='18910007540')
 	'''
-	IMPUser.objects.create_user(username = 'guohaibo', password = '123456',display_name = u'¹ùº£²¨',     tel='82973408',     mobile='15801429196')
+	#IMPUser.objects.create_user(username = 'guohaibo', password = '123456',display_name = u'éƒ­æµ·æ³¢',     tel='82973408',     mobile='15801429196')
+        #IMPUser.objects.create_user(username = 'cuiguanning', password = '123456',display_name = u'å´”å† ç”¯',     tel='82976196',     mobile='18810542870')
+        #IMPUser.objects.create_user(username = 'lixiang', password = '123456',display_name = u'ææƒ³',     tel='82974498',     mobile='15101145611')
+        #IMPUser.objects.create_user(username = 'liushuai', password = '123456',display_name = u'åˆ˜å¸…',     tel='82973175',     mobile='13552315990')
+        #IMPUser.objects.create_user(username = 'liujingguang', password = '123456',display_name = u'åˆ˜æ•¬å…‰',     tel='82976167',     mobile='13621121440')
+        #IMPUser.objects.create_user(username = 'niepengfei', password = '123456',display_name = u'è‚é¹é£',     tel='82975061',     mobile='15201183621')
+        #IMPUser.objects.create_user(username = 'renbaoshen', password = '123456',display_name = u'ä»»ä¿å‚',     tel='82977338',     mobile='18501371836')
+        #IMPUser.objects.create_user(username = 'tainxudong', password = '123456',display_name = u'ç”°æ—­ä¸œ',     tel='82973255',     mobile='13810086899')
+        #IMPUser.objects.create_user(username = 'weiguolong', password = '123456',display_name = u'é­å›½é¾™',     tel='82977458',     mobile='13301123987')
+        #IMPUser.objects.create_user(username = 'xikunbo', password = '123456',display_name = u'å¥šå ƒåš',     tel='82974452',     mobile='13520220379')
+        #IMPUser.objects.create_user(username = 'yumiao', password = '123456',display_name = u'äºæ·¼',     tel='82974427',     mobile='18600587991')
+        #IMPUser.objects.create_user(username = 'zhangqing', password = '123456',display_name = u'å¼ é’',     tel='82974496',     mobile='13811924575')
+        #IMPUser.objects.create_user(username = 'zhangjunwei', password = '123456',display_name = u'å¼ ä¿Šä¼Ÿ',     tel='82976134',     mobile='13581531605')
+        #IMPUser.objects.create_user(username = 'zhaopanlong', password = '123456',display_name = u'èµµæ½˜é¾™',     tel='82975047',     mobile='15910628549')
+        #IMPUser.objects.create_user(username = 'zhuohuansheng', password = '123456',display_name = u'ç¦šç„•å‡',     tel='82975077',     mobile='15600659156')
+        #IMPUser.objects.create_user(username = 'zoujun', password = '123456',display_name = u'é‚¹å†›',     tel='82975060',     mobile='18911126947')
+        #IMPUser.objects.create_user(username = 'xujiaxing', password = '123456',display_name = u'å¾åŠ æ˜Ÿ',     tel='82976125',     mobile='13520596844')
+        IMPUser.objects.create_user(username = 'yuwenpeng', password = '123456',display_name = u'äºæ–‡é¹',     tel='82974497',     mobile='15210874457')
     except:
         print('ERROR')
         return HttpResponse("ERR0R")
@@ -142,15 +196,15 @@ def init_adderss(request):
     return HttpResponse("SUCCEED")
     '''
     new_address = [
-    {'display_name':u'ÂŞ¸É','tel':'82975460','mobile':'13269373256'}, 
-    {'display_name':u'ÍõÈğÑ©','tel':'82974490','mobile':'15801202262'},
-    {'display_name':u'×ŞÈñ','tel':'82974324','mobile':'13681337610'},  
-    {'display_name':u'ÒüÖ¾Î°','tel':'82974536','mobile':'15210012010'},
-    {'display_name':u'Ê¦½õÅô','tel':'','mobile':'18210257509'},        
-    {'display_name':u'ÁõÑŞ','tel':'82974473','mobile':'18801388700'},  
-    {'display_name':u'ÁõÖ¾','tel':'82974359','mobile':'18701392961'},  
-    {'display_name':u'´Ş¶÷Ãú','tel':'','mobile':'18910007540'},        
-    {'display_name':u'ÓÚêÌºÆ','tel':'82976877','mobile':'18600262209'}
+    {'display_name':u'ç½—å¹²','tel':'82975460','mobile':'13269373256'}, 
+    {'display_name':u'ç‹ç‘é›ª','tel':'82974490','mobile':'15801202262'},
+    {'display_name':u'é‚¹é”','tel':'82974324','mobile':'13681337610'},  
+    {'display_name':u'å°¹å¿—ä¼Ÿ','tel':'82974536','mobile':'15210012010'},
+    {'display_name':u'å¸ˆé”¦é¹','tel':'','mobile':'18210257509'},        
+    {'display_name':u'åˆ˜è‰³','tel':'82974473','mobile':'18801388700'},  
+    {'display_name':u'åˆ˜å¿—','tel':'82974359','mobile':'18701392961'},  
+    {'display_name':u'å´”æ©é“­','tel':'','mobile':'18910007540'},        
+    {'display_name':u'äºæ™æµ©','tel':'82976877','mobile':'18600262209'}
     ]
     err_flg = False
     for addr in new_address:

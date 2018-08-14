@@ -1,0 +1,1 @@
+Django admin ÓÃ»§:admin/admin123

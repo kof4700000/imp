@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'address',
     'system',
     'calender',
+    'document',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -127,8 +128,13 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static").replace('\\', '/'),
 ]
-#STATIC_ROOT=os.path.join(BASE_DIR, 'static')
+STATIC_ROOT=os.path.join(BASE_DIR, 'static_sc').replace('\\', '/')
 
 #AUTH_USER_MODEL = 'account.IMPUser'
 
 FILE_CHARSET='gb18030'
+
+#LOGIN_REDIRECT_URL = '/accounts/profile/'
+LOGIN_URL = '/account/sign_in/'
+
+UPLOAD_FILE_PATH = os.path.join(BASE_DIR, "static/docs/").replace('\\', '/')

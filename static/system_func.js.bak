@@ -22,11 +22,11 @@ function get_address_for_sys(url, element_id){	//获取用户下拉菜单
 }*/
 
 //获取用户系统
-function InitialSysPage(url, page_size){
+/*function InitialSysPage(url, page_size){
 	$.get(url ,function(data, status){
 		InitialPage("/system/get_system/", "pagination1", "system_table", data.max_count, page_size)
 		})
-	}
+	}*/
 
 function add_ip_text(element_id){	//添加IP
 	  var opt = "";
@@ -58,6 +58,7 @@ function add_system(url){
 		}
 
 	var sys_detail = {
+		"action":"EDIT",
 		"full_name":$("#full_name").val(),
 		"short_name":$("#short_name").val(),
 		"A":$("#A_role_for_sys").val(),
@@ -109,7 +110,12 @@ function edit_system(url){
 		跳转，然后ajax完成了，这之后再完成submit的提交请求，这时页面又从跳转
 		后的页面跳回执行submit的页面。解决这种情况的一种方法，就是不在回调函数中
 		进行跳转，而在form中添加跳转地址，<form action=url>
-		这样submit完成后就可以跳转到需要的页面*/
+		这样submit完成后就可以跳转到需要的页面，但是这种方法会永远跳转到指定地址
+		回调函数中使用return true/false控制跳转不管用？待测试*/
+		/*如果在ajax的同步方法中，使用django进行render返回可行吗？ajax仅仅对
+		返回的数据进行处理，其他动作一律不做。待测试*/
+		/*还有一种方法就是将button的type变成button而非submit，这样在回调函数中
+		就可以正常的使用跳转了*/
 		//return false;
 		}
 		},

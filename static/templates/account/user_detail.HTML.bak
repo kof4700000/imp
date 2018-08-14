@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+{% extends "base.html" %}
+{% block content %}
+<!--  <li>{{ username }}</li>
+  <li>{{ tel }}</li>
+  <li>{{ mobile}}</li> -->
+  <section class="content-header">
+  	<h1 style="display:inline">用户信息</h1><a class="btn btn-info pull-right" href="{% url 'address_page' %}">返回</a>
+  </section>
+
+    <!-- Main content -->
+    <section class="content">
+
+      <div class="row">
+        <div class="col-md-3">
+
+          <!-- Profile Image -->
+          <div class="box box-primary">
+            <div class="box-body box-profile">
+              <!-- <img class="profile-user-img img-responsive img-circle" src="../../dist/img/user4-128x128.jpg" alt="User profile picture"> -->
+
+              <h3 class="profile-username text-center">{{ display_name }}</h3>
+
+              <p class="text-muted text-center">{{ position }}</p>
+
+              <ul class="list-group list-group-unbordered">
+                <li class="list-group-item">
+                  <b>电话</b> <a class="pull-right">{{ tel }}</a>
+                </li>
+                <li class="list-group-item">
+                  <b>手机</b> <a class="pull-right">{{ mobile }}</a>
+                </li>
+                <li class="list-group-item">
+                  <b>工位</b> <a class="pull-right">5F-037</a>
+                </li>
+                <li class="list-group-item">
+                  <b>工号</b> <a class="pull-right">4460</a>
+                </li>
+                <!--<li class="list-group-item">
+                  <b>邮箱</b> <a class="pull-right">mcj4460@mail.notes.bank-of-china</a>
+                </li>-->
+              </ul>
+							<a href="{% url 'edit_user' username %}" class="btn btn-primary btn-block"><b>修改信息</b></a>
+              <a href="#" class="btn btn-primary btn-block"><b>Connect Me</b></a>
+            </div>
+          </div>
+        </div>
+        <!-- /.col -->
+        <div class="col-md-9">
+          <div class="nav-tabs-custom">
+            <ul class="nav nav-tabs">
+              <li class="active"><a href="#sys" data-toggle="tab">系统信息</a></li>
+              <li><a href="#monitor" data-toggle="tab">监控</a></li>
+              <li><a href="#artical" data-toggle="tab">文档</a></li>
+            </ul>
+            <div class="tab-content">
+              <div class="active tab-pane" id="sys">
+              	{% include 'account/user_sys_tab.html' %}
+              </div>
+              <div class="tab-pane" id="monitor">
+              	{% include 'account/user_sys_tab.html' %}
+              </div>
+              <div class="tab-pane" id="artical">
+              	{% include 'account/user_sys_tab.html' %}
+              </div>
+              <!-- /.tab-pane -->
+            </div>
+            <!-- /.tab-content -->
+          </div>
+          <!-- /.nav-tabs-custom -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+
+    </section>
+    <!-- /.content -->
+  </div>
+{% endblock %}
+

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+{% extends "base.html" %}
+{% block content %}
+<section class="content-header">
+<h1>主机信息</h1>
+</section>
+
+<section class="content">
+<div class="row">
+<div class="col-xs-12">
+  <div class="box">
+    <!-- <div class="box-header">
+    </div>  -->
+    <div class="box-body">
+      <table id="address_table" class="table table-bordered table-striped">
+        <thead>
+          <tr>
+				    <th>IP</th>
+				    <th>系统名</th>
+				    <th>A角</th>
+				    <th>B角</th>
+			    </tr>
+        </thead>
+        <tbody>
+        {% for each in hosts %}
+			    <tr>
+				    <td>{{ each.ip }}</td>
+				    <td>{{ each.sys_name }}</td>
+				    <td>{{ each.A_role }}</td>
+				    <td>{{ each.B_role }}</td>
+			    </tr>
+		    {% endfor%} 	
+        </tbody>
+       </table>
+    </div>
+  </div>
+</div>
+</div>
+</section>
+
+<script>
+	$(document).ready(
+  $(function () {
+  	$('#address_table').DataTable({
+      'paging'      : true,
+      'lengthChange': true,
+      'searching'   : true,
+      'ordering'    : true,
+      'info'        : true,
+      'autoWidth'   : true
+    })
+  }))
+</script>
+{% endblock %}

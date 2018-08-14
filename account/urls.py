@@ -19,9 +19,11 @@ from . import views
 urlpatterns = [
     url(r'^sign_in/$', views.sign_in_page, name = "sign_in"),
     url(r'^sign_up/$', views.sign_up_page, name = "sign_up"),
+    url(r'^current_user/$', views.current_user, name = "current_user"),
     url(r'^login/$', views.login, name = "login"),
+    url(r'^logout/$', views.logout, name = "logout"),
     url(r'^crud_user/$', views.crud_user, name = "crud_user"),
     url(r'^init_address/$', views.init_adderss, name = "init_address"),
-    url(r'^get_detail/([A-z]+)/$', views.get_detail, name = 'get_detail'),
-    url(r'^edit_user/([A-z]+)/$', views.edit_user, name = "edit_user"),
+    url(r'^get_detail/([A-z]*)/$', views.get_detail, name = 'get_detail'),
+    url(r'^edit_user/([A-z]*)/$', views.edit_user, name = "edit_user"),
 ]

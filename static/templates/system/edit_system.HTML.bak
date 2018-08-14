@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+{% extends "base.html" %}
+{% block content %}
+<script src="/static/templates/AdminLTE-2.4.3/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="/static/system_func.js"></script>
+<script>get_address_for_sys('{% url 'get_address' %}','A_role_for_sys')</script>
+<script>get_address_for_sys('{% url 'get_address' %}','B_role_for_sys')</script>
+  <section class="content-header">
+  	<h1 style="display:inline">修改系统信息</h1><a class="btn btn-info pull-right" href="{% url 'system_page' %}">返回</a>
+  </section>
+    <section class="content">
+      <div class="row">
+        <div class="col-md-12">
+          <!-- general form elements -->
+          <div class="box box-primary">
+            <!-- <div class="box-header with-border">
+              <h3 class="box-title">Quick Example</h3>
+            </div> -->
+            <!-- /.box-header -->
+            
+            <!-- <form role="form" action="{% url 'crud_system' %}" method="POST"> -->
+            <!-- <form role="form" action="{% url 'system_page' %}"> -->
+            <form role="form">
+              <div class="box-body">
+              	<div class="box-header with-border">
+                  <h3 class="box-title">系统信息</h3>
+                </div>
+              	<div class="row">
+                  <div class="form-group">
+                    <div class="col-xs-5">
+                    	<label>全称</label>
+                      <input class="form-control" id="full_name" value={{ full_name }}>
+                    </div>
+
+                	  <div class="col-xs-3">
+                      <label>缩写</label>
+                      <input class="form-control" id="short_name" value={{ short_name }}>
+                    </div>
+                  </div>
+                </div>
+                <div class="box-header with-border">
+                  <h3 class="box-title">角色信息</h3>
+                </div>
+                <div class="row">
+                  <div class="form-group">                
+                    <div class="col-xs-3">
+                    	<label>A角</label>
+                      <select class="form-control select2" style="width: 100%;" id="A_role_for_sys">
+			                  <option selected="selected">{{ A_role }}</option>
+			                </select>
+                    </div>
+                  <!-- </div>
+                  <div class="form-group"> -->
+                	  <div class="col-xs-3">
+                      <label>B角</label>
+                      <select class="form-control select2" style="width: 100%;" id="B_role_for_sys">
+			                  <option selected="selected">{{ B_role }}</option>
+			                </select>
+                    </div>
+                  </div>
+                </div>
+                <div class="box-header with-border">
+                  <h3 class="box-title">IP信息</h3>
+                </div>
+                <div class="row">
+		              <div class="form-group">
+		              	<div class="col-xs-8">
+		              		<div class="input-group col-xs-8">
+			                	<label>IP Group:</label>
+			                	<button type="button" class="btn btn-info pull-right" onclick="add_ip_text('#IP_group')">添加IP</button>
+			              	</div>
+			                <div id="IP_group">
+			                	{% for each in ip %}
+			                	<div class="input-group col-xs-8">
+			                  	<div class="input-group-addon">
+			                    	<i class="fa fa-laptop"></i>
+			                  	</div>
+			                  	<input type="text" class="form-control" data-inputmask="'alias': 'ip'" data-mask value={{ each.ip }}>
+			                  	<div class="input-group-btn">
+                  					<button type="button" class="btn btn-danger" onclick="delete_ip_text(this)">DELETE</button>
+                					</div>
+			                	</div>
+			                	{% endfor%}
+			                </div>
+		                </div>
+		                <!-- /.input group -->
+		              </div>
+	              </div>
+	              
+                <!-- <div class="form-group">
+                  <label for="exampleInputFile">File input</label>
+                  <input type="file" id="exampleInputFile">
+
+                  <p class="help-block">Example block-level help text here.</p>
+                </div>
+                <div class="checkbox">
+                  <label>
+                    <input type="checkbox"> Check me out
+                  </label>
+                </div> -->
+              </div>
+              <!-- /.box-body -->
+              <div class="box-footer">
+              	<div class="col-xs-8">
+                <!-- <button type="submit" class="btn btn-primary" onclick="edit_system('{% url 'crud_system' %}')">Submit</button> -->
+                	<button type="button" class="btn btn-primary" onclick="edit_system('{% url 'crud_system' %}')">提交</button>
+                	<a class="btn btn-info pull-right" href="{% url 'system_detail' short_name %}">取消编辑</a>
+              	</div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+{% endblock %}
