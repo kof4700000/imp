@@ -3,27 +3,18 @@ from .models import Document
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
 from django.conf import settings
+from django.views import generic
 
 # Create your views here.
-def doc_page(request):
-    """
-    Show default page of Document.All Documents are displayed.
-    """
-    response = []
-    doc = Document.objects.all()
-    for each in doc:
-        response.append({"doc_name" : each.doc_name,
-                         "doc_id" : each.id})
-    return render(request, "document/document.html", context={"doc":response})
+class DocListView(generic.ListView):
+    template_name = "document/document.html"
+    model = Document
+    context_object_name = "doc"
 
-def doc_detail(request, doc_id):
-    """
-    Show detail page of specific Document identified by doc_id.
-    Document contents are displayed.
-    """
-    doc = Document.objects.get(id = doc_id)
-    context={"doc":doc.src}
-    return render(request, "document/document_detail.html", context)
+class DocDetailView(generic.DetailView):
+    template_name = "document/document_detail.html"
+    model = Document
+    context_object_name = "doc"
 
 @csrf_exempt
 def upload_file(request):

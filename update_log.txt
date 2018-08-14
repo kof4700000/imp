@@ -1,0 +1,3 @@
+v1.03_beta:
+    1. rewrite document app using class-based views.
+    2. rewrite account app using forms.

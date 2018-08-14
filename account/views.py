@@ -6,11 +6,12 @@ from .models import *
 from django.core import urlresolvers
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from .forms import LoginForm
 import json
 
 # Create your views here.
-def sign_in_page(request):
-    return render(request, "account/sign_in.html", context={})
+#def sign_in_page(request):
+#    return render(request, "account/sign_in.html", context={})
 
 def sign_up_page(request):
     return render(request, "account/sign_up.html", context={})
@@ -26,6 +27,22 @@ def current_user(request):
         return HttpResponse('error')
 
 def login(request):
+    if request.method == 'POST':
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+            user = auth.authenticate(username=username, password=password)
+            if user is not None:
+                auth.login(request, user)
+                return redirect(urlresolvers.reverse("front_page"))
+            return render(request, "account/sign_in.html", context={'error':'Check Password','form':form})
+    # if a GET (or any other method) we'll create a blank form
+    else:
+        form = LoginForm()
+    return render(request, "account/sign_in.html", context={'form':form})
+    '''
+def login(request):
     """
     login function.
     """
@@ -35,14 +52,14 @@ def login(request):
     print(user)
     if user is not None:
         auth.login(request, user)
-        return redirect(urlresolvers.reverse("front_page")) 
+        return redirect(urlresolvers.reverse("front_page"))
     return redirect(urlresolvers.reverse("sign_in"))
+    '''
 
 def logout(request):
     """
     logout function.
     """
-    print(request.user)
     try:
         auth.logout(request)
         return JsonResponse({"success":True})

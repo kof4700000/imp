@@ -17,7 +17,7 @@
 		    <form id="upload">
 		    <div class="modal-body">
 		      <div class="form-group">
-			        <label>File input</label>
+			        <label style="display:block">File input</label>
 			        <input type="file" id="exampleInputFile" style="display:inline">
 			        <div class="form-group has-error" style="display:none" id="no_file_tip">
   							<label class="control-label"><i class="fa fa-times-circle-o"></i>ÇëÑ¡ÔñÎÄ¼þ</label>
@@ -60,7 +60,7 @@
         <tbody>
         {% for each in doc %}
 			    <tr>
-				    <td><a href="{% url 'doc_detail' each.doc_id %}">{{ each.doc_name }}</a></td>
+				    <td><a href="{% url 'doc_detail' each.id %}">{{ each.doc_name }}</a></td>
 			    </tr>
 		    {% endfor%} 	
         </tbody>

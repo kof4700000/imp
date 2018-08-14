@@ -59,11 +59,12 @@
   $(function () {
   	$('#address_table').DataTable({
       'paging'      : true,
-      'lengthChange': true,
+      'lengthChange': false,
       'searching'   : true,
       'ordering'    : false,
       'info'        : true,
-      'autoWidth'   : true
+      'autoWidth'   : true,
+      'iDisplayLength':15,	//default entries count
     })
   }))
 </script>

@@ -1,12 +1,21 @@
 <!DOCTYPE html>
 <html>
 <form action="{% url 'login' %}" method="post">
+	<!-- {{ form.non_field_errors }} -->
 	{% csrf_token %}
-	<p>username</p>
-	<input type="text" name="username">
-	<p>password</p>
-	<input type="password" name="password">
+	<!-- 可以单独使用form.attribute -->	
+	{{ form.username.errors }}
+	{% for error in form.username.errors %}
+		{{ error }}	<!-- 取出的内容为string -->
+	{% endfor %}
+	{{ form.username.id_for_lable }}
+	{{ form.username }}
+	{{ form.label_tag }}
+	{{ form.password }}
+	<!-- {{ form }} -->
 	<input type="submit" value="LOGIN">
+	{{ error }}
 	</form>
-<a href="/account/sign_up">sign up</>
+<a href="/account/sign_up">sign up</a>
+<br>
 </html>

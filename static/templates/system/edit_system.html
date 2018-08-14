@@ -101,8 +101,11 @@
               </div>
               <!-- /.box-body -->
               <div class="box-footer">
+              	<div class="col-xs-8">
                 <!-- <button type="submit" class="btn btn-primary" onclick="edit_system('{% url 'crud_system' %}')">Submit</button> -->
-                <button type="button" class="btn btn-primary" onclick="edit_system('{% url 'crud_system' %}')">Submit</button>
+                	<button type="button" class="btn btn-primary" onclick="edit_system('{% url 'crud_system' %}')">提交</button>
+                	<a class="btn btn-default pull-right" href="{% url 'system_detail' short_name %}">取消编辑</a>
+              	</div>
               </div>
             </form>
           </div>

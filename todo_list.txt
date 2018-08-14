@@ -1,0 +1,26 @@
+widgets - DJANGO DOC page 219
+
+blog page using form
+
+1.修改系统信息时，IP group的变化修改
+现有实现方式为删除原有所有IP group，重新添加新IP group
+前端传入后端所有修改IP，查找现有IP再进行功能匹配...
+
+returning errors - page 188(41)
+
+2.AUTO TEST - DJANGO DOC page 50 2.7 Writing your first Django app, part 5
+
+3.Model Metadata - DJANGO DOC page 91
+
+4.Model attributes：Manager - DJANGO DOC page 91
+
+5.Model field lookups - page 1118 
+	-> QuerySet are lazy page 105
+	-> When QuerySets are evaluated
+
+6.Model page 84
+The default HTML widget to use when rendering a form field (e.g. <input type="text">, <select>).
+
+7.Multiple databases - page 148
+
+6.文档增删查改，非PDF格式文档
